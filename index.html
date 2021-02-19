@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+<head>
+  <title>Vuetify DataTable check rules on EditDialog</title>
+  <meta charset="utf-8">
+
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+
+  <style>
+    /* Layout */
+    #app {
+      background-color: lightskyblue;
+    }
+    .title {
+      width: 100%;
+      text-align: center;
+      font-size: x-large;
+    }
+    .v-data-table-header th {
+      background-color: lightcyan !important;
+    }
+
+    /* common */
+    .disable {
+      pointer-events: none !important;
+    }
+    .v-btn.disable {
+      background-color: lightpink;
+    }
+
+    .width_5 {
+      width: 5rem;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="main" v-cloak>
+    <v-app>
+      <div class="title">DataTable Fixed Columns</div>
+
+      <v-data-table
+        id = "dtable"
+        :headers = "headers"
+        :items = "items"
+        :height = "$vuetify.breakpoint.height -100"
+        fixed-header
+        >
+
+        <template v-slot:item="props">
+          <tr>
+            <td class="text-center">{{ props.item.no }}</td>
+
+            <td :class="props.item.item1 ? '':'red'">
+              <v-edit-dialog
+                @open="tmp_input.item1 = props.item.item1;"
+                @save="props.item.item1 = tmp_input.item1;"
+                large cancel-text="Cancel" save-text="Save">
+                <div class="rw">
+                  <span class="width_8">{{ props.item.item1 }}</span>
+                </div>
+                <template v-slot:input>
+                  <v-form v-model="valids.item1" @submit.prevent>
+                    <v-text-field
+                      v-model=tmp_input.item1
+                      label="ITEM 1"
+                      counter
+                      :rules="[rules.required, rules.max5]"
+                    ></v-text-field>
+                  </v-form>
+                </template>
+              </v-edit-dialog>
+            </td>
+
+            <td>
+              <v-edit-dialog
+              @open="tmp_input.item2 = props.item.item2;"
+              @save="props.item.item2 = tmp_input.item2;"
+              large cancel-text="Cancel" save-text="Save">
+                <div class="rw">
+                  <span class="width_8">{{ props.item.item2 }}</span>
+                </div>
+                <template v-slot:input>
+                  <v-form v-model="valids.item2" @submit.prevent>
+                    <v-text-field
+                    v-model=tmp_input.item2
+                    label="ITEM 2"
+                      counter
+                      :rules="[rules.max10]"
+                    ></v-text-field>
+                  </v-form>
+                </template>
+              </v-edit-dialog>
+            </td>
+
+            <!-- Action Buttons -->
+            <td>
+              <v-icon color="indigo" @click="">mdi-pencil</v-icon>
+            </td>
+          </tr>
+        </template>
+      </v-data-table>
+
+    </v-app>
+  </div>
+
+  <!-- Library -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+
+  <!-- Modules -->
+  <script src="./main.js"></script>
+</body>
+</html>
+
